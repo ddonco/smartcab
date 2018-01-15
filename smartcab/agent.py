@@ -9,7 +9,7 @@ class LearningAgent(Agent):
         This is the object you will be modifying. """ 
 
     def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
-        super(LearningAgent, self).__init__(env)     # Set the agent in the evironment 
+        super(LearningAgent, self).__init__(env)     # Set the agent in the environment
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
 
@@ -20,7 +20,7 @@ class LearningAgent(Agent):
         self.alpha = alpha       # Learning factor
 
         # Set any additional class parameters as needed
-        self.time_step = 0
+        self.trial_step = 0
 
 
     def reset(self, destination=None, testing=False):
@@ -39,8 +39,8 @@ class LearningAgent(Agent):
             self.alpha = 0
         else:
             # Sinusoid decay of exploration factor
-            self.epsilon = math.cos(self.alpha * self.time_step)
-            self.time_step += 1
+            self.epsilon = math.cos(0.002 * self.trial_step)
+            self.trial_step += 1
 
         return None
 
@@ -60,7 +60,7 @@ class LearningAgent(Agent):
         # With the hand-engineered features, this learning process gets entirely negated.
         
         # Set 'state' as a tuple of relevant data for the agent
-        state = (waypoint, inputs["light"], inputs["oncoming"], inputs["left"], inputs["right"])
+        state = (waypoint, inputs["light"], inputs["oncoming"], inputs["right"])
 
         return state
 
@@ -158,7 +158,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning = True, epsilon=1, alpha=0.002)
+    agent = env.create_agent(LearningAgent, learning = True, epsilon=1, alpha=0.5)
     
     ##############
     # Follow the driving agent
